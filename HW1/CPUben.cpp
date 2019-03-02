@@ -4,12 +4,10 @@ using namespace std;
 
 void CreateMatrix(double**);
 void InvertMatrix(double**);
-void DisplayMatrix(double**);
 void SwapMatrix(double**);
 void CreateArray(int*);
 int partition(int*, int, int);
 void QuickSort(int*, int, int);
-void DisplayArray(int*);
 void DOUBLE(double**);
 void INTEGER(int*);
 double ElapsedTime(clock_t);
@@ -71,16 +69,6 @@ void InvertMatrix(double **A) {
     }
   }
   SwapMatrix(A);
-  //DisplayMatrix(A);
-}
-void DisplayMatrix(double **A) {
-  int i, j;
-  for (int i = 0; i < MSIZE; i++) {
-    for (int j = 0; j < 2 * MSIZE; j++) {
-      cout << A[i][j] << " ";
-    }
-    cout << endl;
-  }
 }
 void SwapMatrix(double **A) {
   double **T = new double*[MSIZE];
@@ -132,12 +120,6 @@ void QuickSort(int *arr, int low, int high) {
     QuickSort(arr, low, pi - 1);
     QuickSort(arr, pi + 1, high);
   }
-}
-void DisplayArray(int *arr) {
-  for (int i = 0; i < ASIZE; i++) {
-    cout << arr[i] << " ";
-  }
-  cout << endl;
 }
 
 void DOUBLE(double **A) {
