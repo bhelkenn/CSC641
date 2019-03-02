@@ -12,11 +12,10 @@ void DOUBLE(double**);
 void INTEGER(int*);
 double ElapsedTime(clock_t);
 void DisplayStats();
-static int MSIZE = 475;
-static int ASIZE = 120000;
-static int TIME = 10;
+
+static int MSIZE = 250, ASIZE = 35000, TIME = 10;
 int NINT = 0, NFLOAT = 0;
-double VINT, VFLOAT, AverageSpeed;
+double VINT = 0.0, VFLOAT = 0.0, AverageSpeed = 0.0;
 
 int main() {
   double **A = new double*[MSIZE];
@@ -144,27 +143,22 @@ void INTEGER(int *arr) {
   VINT = 60 * NINT / ElapsedTime(start_time);
 }
 double ElapsedTime(clock_t start_time) {
-  clock_t elapsed_time = clock() - start_time;
-  double elapsed_sec = elapsed_time * 1.0 / CLOCKS_PER_SEC;
-  return elapsed_sec;
+  return (clock() - start_time) * 1.0 / CLOCKS_PER_SEC;
 }
 void DisplayStats() {
   cout << "Matrix Size: " << MSIZE << endl;
   cout << "Matrix Inversion Time (sec): "
       << 60 / VFLOAT << " seconds\n";
-  cout << "Matrix Inversions Done (within " << TIME << " seconds): "
-      << NFLOAT << endl;
   cout << "Speed of Matrix Inversions: "
       << VFLOAT << " inversion sets / minute\n\n";
 
   cout << "Array Size: " << ASIZE << endl;
   cout << "QuickSort Time (sec): "
       << 60 / VINT << " seconds\n";
-  cout << "QuickSorts Done (within " << TIME << " seconds): "
-      << NINT << endl;
   cout << "Speed of QuickSort Sorts: "
       << VINT << " sorts / minute\n\n";
 
   cout << "Average Processing Speed: "
       << AverageSpeed << " operations / minute\n";
+  char c; cin >> c; //forces program to wait for input
 }
