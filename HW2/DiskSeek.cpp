@@ -3,8 +3,8 @@
 
 using namespace std;
 int Q, XMAX = 8057, RPM = 7200, XSTAR = 1686, X, TESTS = 10000;
-int SEED = 0, SEEKDIST;
-double SEEKTIME;
+int SEED = 0, DIST;
+double TESTTIME;
 double T = 1.5455, C = 0.3197, R = 0.3868;
 double AVGDIST, AVGTIME;
 
@@ -23,8 +23,8 @@ int main() {
     dq = new int[Q]; populateDQ(dq);
     for (int i = 0; i < TESTS; i++) {
       updateIOPosition(dq);
-      seek_distances[i] = SEEKDIST;
-      seek_times[i] = SEEKTIME;
+      seek_distances[i] = DIST;
+      seek_times[i] = TESTTIME;
     }
     calcAverages(seek_distances, seek_times); displayResults();
     delete dq;
@@ -41,10 +41,10 @@ void updateIOPosition(int *dq) {
   static int firstcall = 1;
   if (firstcall) {X = rng(); firstcall = 0;} //init IO head
   else {
-    SEEKDIST = minDist(dq);
-    SEEKTIME = T + C * pow(SEEKDIST - 1, R);
-    if (SEEKDIST > XSTAR)
-      SEEKTIME += (C * R * (SEEKDIST - XSTAR)) / pow(XSTAR - 1, 1 - R);
+    DIST = minDist(dq);
+    TESTTIME = T + C * pow(DIST - 1, R);
+    if (DIST > XSTAR)
+      TESTTIME += (C * R * (DIST - XSTAR)) / pow(XSTAR - 1, 1 - R);
   }
 }
 int minDist(int *dq) {
@@ -54,8 +54,7 @@ int minDist(int *dq) {
     int test = X - dq[i]; if (test < 0) test *= -1;
     if (test < min) {min = test; pos = i;}
   }
-  X = dq[pos];
-  dq[pos] = rng();
+  X = dq[pos]; dq[pos] = rng();
   return min;
 }
 int rng() {
