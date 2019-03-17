@@ -2,7 +2,7 @@
 #include <math.h>
 
 using namespace std;
-int Q, XMAX = 8057, RPM = 7200, XSTAR = 1686, X, TESTS = 10000;
+int Q, XMAX = 8057, XSTAR = 1686, X, TESTS = 10000;
 int SEED = 0, DIST;
 double TESTTIME;
 double T = 1.5455, C = 0.3197, R = 0.3868;
