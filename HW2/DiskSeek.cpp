@@ -2,49 +2,46 @@
 #include <math.h>
 
 using namespace std;
-int Q, XMAX = 8057, XSTAR = 1686, X, TESTS = 10000;
+#define TESTS 10000
+int Q, XMAX = 8057, XSTAR = 1686, X;
 int SEED = 0, DIST;
-double TESTTIME;
 double T = 1.5455, C = 0.3197, R = 0.3868
-double AVGDIST, AVGTIME;
+double TIME, AVGDIST, AVGTIME;
+int SEEK_DISTANCES[TESTS];
+double SEEK_TIMES[TESTS];
 
 void populateDQ(int *);
 void updateIOPosition(int *);
 int minDist(int *);
-int rng();
-void calcAverages(int *, double *);
+int rng() {return SEED = ((5 * SEED + 1699) % XMAX) + 1;};
+void calcAverages();
 void displayResults();
 int main() {
   int *dq;
-  int *seek_distances = new int[TESTS];
-  double *seek_times = new double[TESTS];
-
   for (Q = 1; Q <= 20; Q++) {
     dq = new int[Q]; populateDQ(dq);
     for (int i = 0; i < TESTS; i++) {
       updateIOPosition(dq);
-      seek_distances[i] = DIST;
-      seek_times[i] = TESTTIME;
+      SEEK_DISTANCES[i] = DIST;
+      SEEK_TIMES[i] = TIME;
     }
-    calcAverages(seek_distances, seek_times); displayResults();
+    calcAverages(); displayResults();
     delete dq;
   }
   return 0;
 }
 
 void populateDQ(int *dq) {
-  for (int i = 0; i < Q; i++) {
-    dq[i] = rng();
-  }
+  for (int i = 0; i < Q; i++) {dq[i] = rng();}
 }
 void updateIOPosition(int *dq) {
   static int firstcall = 1;
   if (firstcall) {X = rng(); firstcall = 0;} //init IO head
   else {
     DIST = minDist(dq);
-    TESTTIME = T + C * pow(DIST - 1, R);
+    TIME = T + C * pow(DIST - 1, R);
     if (DIST > XSTAR)
-      TESTTIME += (C * R * (DIST - XSTAR)) / pow(XSTAR - 1, 1 - R);
+      TIME += (C * R * (DIST - XSTAR)) / pow(XSTAR - 1, 1 - R);
   }
 }
 int minDist(int *dq) {
@@ -57,17 +54,13 @@ int minDist(int *dq) {
   X = dq[pos]; dq[pos] = rng();
   return min;
 }
-int rng() {
-  SEED = ((5 * SEED + 1699) % XMAX) + 1; //num between 1 and XMAX
-  return SEED;
-}
-void calcAverages(int *seek_distances, double *seek_times) {
+void calcAverages() {
   double dsum = 0.0, tsum = 0.0;
   for (int i = 0; i < TESTS; i++) {
-    dsum += seek_distances[i];
-    tsum += seek_times[i];
+    dsum += SEEK_DISTANCES[i];
+    tsum += SEEK_TIMES[i];
   }
-  AVGDIST = dsum / TESTS; AVGTIME = tsum / TESTS;
+  AVGDIST = dsum / double(TESTS); AVGTIME = tsum / double(TESTS);
 }
 void displayResults() {
   cout << "\nQueue Length: " << Q << ":\n";
